@@ -11,6 +11,7 @@ public class PlayerMove : MonoBehaviour
     
     [SerializeField]
     private float jumpPower;
+    private int jumpCount;
 
     private Rigidbody2D myRIgid;
 
@@ -18,7 +19,9 @@ public class PlayerMove : MonoBehaviour
     
 
     private bool isJumping = false;
-    
+
+    public float Speed =3f;
+
     void Start()
     {
         myRIgid = gameObject.GetComponent<Rigidbody2D>();
@@ -26,9 +29,14 @@ public class PlayerMove : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+
+        transform.Translate(Speed * Time.deltaTime, 0, 0);
+
+
+        if (Input.GetKeyDown(KeyCode.Space) && (jumpCount == 0 || jumpCount == 1))
         {
             isJumping = true;
+            jumpCount++;
         }
     }
 
@@ -40,5 +48,13 @@ public class PlayerMove : MonoBehaviour
         
         myRIgid.AddForce(new Vector2(0, jumpPower));
         isJumping = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Land"))
+        {
+            jumpCount = 0;
+        }
     }
 }

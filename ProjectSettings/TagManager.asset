@@ -3,7 +3,32 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - PlayerBody
+  - PlayerArm
+  - PlayerArmBullet
+  - Enemy
+  - EnemyBody
+  - EnemyArm
+  - Road
+  - Item
+  - Object
+  - DestroyObject
+  - MoveObject
+  - DamageObject
+  - CameraTrigger
+  - EventTrigger
+  - KeyDoor
+  - DestroySwitch
+  - Shadow
+  - SubCamera
+  - Bullet
+  - Activator
+  - Yellow
+  - Green
+  - Monster
+  - Coin
+  - Obstacle
   layers:
   - Default
   - TransparentFX
@@ -13,15 +38,15 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - StageBack
+  - Road
+  - Object
+  - Player
+  - GroundCheck
+  - Item
+  - CameraTrigger
+  - PhysicsETC
+  - Monster
   - 
   - 
   - 
@@ -40,4 +65,37 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Back
+    uniqueID: 3415594337
+    locked: 0
+  - name: Road
+    uniqueID: 3340678349
+    locked: 0
+  - name: ObjectBack
+    uniqueID: 1228136373
+    locked: 0
+  - name: Object
+    uniqueID: 3368627195
+    locked: 0
+  - name: Item
+    uniqueID: 803800503
+    locked: 0
+  - name: Char
+    uniqueID: 152684045
+    locked: 0
+  - name: CharFront
+    uniqueID: 1288333601
+    locked: 0
+  - name: ObjectFront
+    uniqueID: 695472795
+    locked: 0
+  - name: Front
+    uniqueID: 434057631
+    locked: 0
+  - name: GUI
+    uniqueID: 599453309
+    locked: 0
+  - name: CameraFilter
+    uniqueID: 4207016093
     locked: 0
