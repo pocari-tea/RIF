@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Net;
 using MySql.Data.MySqlClient;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,31 +13,27 @@ public class Refresh : MonoBehaviour
     [SerializeField] private Text High_Score;
     [SerializeField] private Text Money;
     [SerializeField] private Text Cash;
-
+    
+    private IPAddress[] addr;
 
     private void Start()
     {
-        Nick = GameObject.Find("Nick").GetComponent<Text>();
-        LvText = GameObject.Find("LvText").GetComponent<Text>();
-        EXP = GameObject.Find("EXP").GetComponent<Image>();
-        High_Score = GameObject.Find("Score").GetComponent<Text>();
-        Money = GameObject.Find("Money").GetComponent<Text>();
-        Cash = GameObject.Find("Cash").GetComponent<Text>();
-    }
-
-    private void Awake()
-    {
+        IPHostEntry ipEntry = Dns.GetHostEntry(Dns.GetHostName());
+        addr = ipEntry.AddressList;
+        
         StartCoroutine(RefreshCo());
-    }
-
-    public void RefreshBtn()
-    {
-        StartCoroutine(RefreshCo());
+        
+        // Nick = gameObject.GetComponent<Text>();
+        // LvText = gameObject.GetComponent<Text>();
+        // EXP = gameObject.GetComponent<Image>();
+        // High_Score = gameObject.GetComponent<Text>();
+        // Money = gameObject.GetComponent<Text>();
+        // Cash = gameObject.GetComponent<Text>();
     }
 
     private IEnumerator RefreshCo()
     {
-        MySqlConnection conn = new MySqlConnection("server=192.168.0.37; port=3306; Database=software; uid=root; pwd=123; CharSet=utf8;");
+        MySqlConnection conn = new MySqlConnection("server=" + addr[1] + "; port=3306; Database=software; uid=root; pwd=123; CharSet=utf8;");
         try
         {
             // 2. DB 열기

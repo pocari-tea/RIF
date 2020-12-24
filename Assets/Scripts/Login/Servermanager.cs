@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Net;
 using MySql.Data.MySqlClient;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Login
@@ -29,8 +31,15 @@ namespace Login
         [SerializeField] private GameObject LogErrPanel;
         [SerializeField] private GameObject RegErrPanel;
 
-        
-        
+        private IPAddress[] addr;
+
+        private void Start()
+        {
+            IPHostEntry ipEntry = Dns.GetHostEntry(Dns.GetHostName());
+            addr = ipEntry.AddressList;
+        }
+
+
         public void RegisterBtn()
         {
             StartCoroutine(RegisterCo());
@@ -38,7 +47,7 @@ namespace Login
 
         private IEnumerator RegisterCo()
         {
-            MySqlConnection conn = new MySqlConnection("server=192.168.0.37; port=3306; Database=software; uid=root; pwd=123; CharSet=utf8;");
+            MySqlConnection conn = new MySqlConnection("server=" + addr[1] + "; port=3306; Database=software; uid=root; pwd=123; CharSet=utf8;");
             try
             {
                 // 2. DB 열기
@@ -69,7 +78,7 @@ namespace Login
 
         private IEnumerator LoginCo()
         {
-            MySqlConnection conn = new MySqlConnection("server=192.168.0.37; port=3306; Database=software; uid=root; pwd=123; CharSet=utf8;");
+            MySqlConnection conn = new MySqlConnection("server=" + addr[1] + "; port=3306; Database=software; uid=root; pwd=123; CharSet=utf8;");
             try
             {
                 // 2. DB 열기

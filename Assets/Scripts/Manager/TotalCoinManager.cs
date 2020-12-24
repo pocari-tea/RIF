@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using MySql.Data.MySqlClient;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,9 +15,13 @@ public class TotalCoinManager : MonoBehaviour
     private Text totalCoinT;
 
     public int totalCoin;
-
+    
+    private IPAddress[] addr;
     void Start()
     {
+        IPHostEntry ipEntry = Dns.GetHostEntry(Dns.GetHostName());
+        addr = ipEntry.AddressList;
+        
         instance = this;
         totalCoinT.text = string.Format("{0}", totalCoin);
     }
@@ -26,7 +31,7 @@ public class TotalCoinManager : MonoBehaviour
         totalCoin += coin;
         totalCoinT.text = string.Format("{0}", totalCoin);       
         
-        MySqlConnection conn = new MySqlConnection("server=192.168.0.37; port=3306; Database=software; uid=root; pwd=123; CharSet=utf8;");
+        MySqlConnection conn = new MySqlConnection("server=" + addr[1] + "; port=3306; Database=software; uid=root; pwd=123; CharSet=utf8;");
         try
         {
             // 2. DB 열기
