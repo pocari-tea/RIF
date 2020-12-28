@@ -39,6 +39,12 @@ namespace Login
             addr = ipEntry.AddressList;
         }
 
+        public void Clear()
+        {
+            NewIDInputField.text = "";
+            NewNickInputField.text = "";
+            NewPWInputField.text = "";
+        }
 
         public void RegisterBtn()
         {

@@ -11,9 +11,6 @@ public class TotalCoinManager : MonoBehaviour
 {
     public static TotalCoinManager instance;
 
-    [SerializeField]
-    private Text totalCoinT;
-
     public int totalCoin;
     
     private IPAddress[] addr;
@@ -23,27 +20,40 @@ public class TotalCoinManager : MonoBehaviour
         addr = ipEntry.AddressList;
         
         instance = this;
-        totalCoinT.text = string.Format("{0}", totalCoin);
     }
 
     public void Coin(int coin)
     {
-        totalCoin += coin;
-        totalCoinT.text = string.Format("{0}", totalCoin);       
-        
         MySqlConnection conn = new MySqlConnection("server=" + addr[1] + "; port=3306; Database=software; uid=root; pwd=123; CharSet=utf8;");
         try
         {
             // 2. DB 열기
             conn.Open();
             
-            // 3. Insert 쿼리 실행
-            string query = "UPDATE game SET Money = '" + coin + "' + where ID = '" + User.SetTest() + "';";
-                
-            MySqlCommand cmd = new MySqlCommand(query, conn);
+            // select로 보유 코인 찾기
+            string query1 = "select Money from game where ID = '" + User.SetTest() + "';";
+            MySqlCommand cmd = new MySqlCommand(query1, conn);
+
+            // 4. 쿼리 결과 가져오기
+            MySqlDataReader Reader1 = cmd.ExecuteReader();
+
+            if(Reader1.Read())
+            {
+                totalCoin = int.Parse(Reader1.GetValue(0).ToString());
+
+                totalCoin += coin;
+            }
+            
+            Reader1.Close();
+            
+            // 3. update 쿼리로 코인 추가
+            string query = "UPDATE game SET Money = '" + totalCoin + "' where ID = '" + User.SetTest() + "';";
+            
+            cmd = new MySqlCommand(query, conn);
 
             MySqlDataReader Reader = cmd.ExecuteReader();
 
+            Reader.Close();
         }
         catch (Exception ex)
         {

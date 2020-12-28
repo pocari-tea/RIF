@@ -10,15 +10,9 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
 
-    [SerializeField]
-    private Text expT;
-
-    [SerializeField]
-    private Image expI;
-
     private int maxExp = 100;
     public int exp;
-    private int level = 1;
+    private int level;
     
     private IPAddress[] addr;
 
@@ -31,29 +25,48 @@ public class LevelManager : MonoBehaviour
     }
 
 
-    public void Exp(int temp)
+    public void Exp(int temp_exp)
     {
-        exp += temp;
-        if (exp >= maxExp)
-        {
-            level +=1;
-            expT.text = string.Format("{0}", level);
-            exp = maxExp - 100;
-        }
-        
         MySqlConnection conn = new MySqlConnection("server=" + addr[1] + "; port=3306; Database=software; uid=root; pwd=123; CharSet=utf8;");
         try
         {
             // 2. DB 열기
             conn.Open();
             
-            // 3. Insert 쿼리 실행
-            string query = "UPDATE game SET Lv = '" + level + "', EXP = '" + exp + "' + where ID = '" + User.SetTest() + "';";
-                
-            MySqlCommand cmd = new MySqlCommand(query, conn);
+            // select로 경험치 찾기
+            string query1 = "select Lv, EXP from game where ID = '" + User.SetTest() + "';";
+            MySqlCommand cmd = new MySqlCommand(query1, conn);
 
+            // 4. 쿼리 결과 가져오기
+            MySqlDataReader Reader1 = cmd.ExecuteReader();
+
+            if(Reader1.Read())
+            {
+                level = int.Parse(Reader1.GetValue(0).ToString());
+                exp = int.Parse(Reader1.GetValue(1).ToString());
+                
+                exp += temp_exp;
+                
+                if (exp >= maxExp)
+                {
+                    for (int i = 0; i < exp / maxExp; i++)
+                    {
+                        level += 1;
+                    }
+                    exp = exp % maxExp;
+                }
+            }
+            
+            Reader1.Close();
+            
+            // update 쿼리 실행
+            string query = "UPDATE game SET Lv = '" + level + "', EXP = '" + exp + "' where ID = '" + User.SetTest() + "';";
+            
+            cmd = new MySqlCommand(query, conn);
+                
             MySqlDataReader Reader = cmd.ExecuteReader();
 
+            Reader.Close();
         }
         catch (Exception ex)
         {

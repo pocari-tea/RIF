@@ -22,13 +22,6 @@ public class Refresh : MonoBehaviour
         addr = ipEntry.AddressList;
         
         StartCoroutine(RefreshCo());
-        
-        // Nick = gameObject.GetComponent<Text>();
-        // LvText = gameObject.GetComponent<Text>();
-        // EXP = gameObject.GetComponent<Image>();
-        // High_Score = gameObject.GetComponent<Text>();
-        // Money = gameObject.GetComponent<Text>();
-        // Cash = gameObject.GetComponent<Text>();
     }
 
     private IEnumerator RefreshCo()

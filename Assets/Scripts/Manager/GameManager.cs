@@ -32,8 +32,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject gameEndPanel;
 
-    public int score = 0;
+    private int score;
     private int ingameCoin;
+    private int temp_exp;
 
     private bool endGame = false;
 
@@ -57,6 +58,7 @@ public class GameManager : MonoBehaviour
             gmaeStartPanel.SetActive(false);
             gameTimer.text = "" + Mathf.Round(gamePlayTime);
             ingameCoinT.text = string.Format("{0}", ingameCoin);
+            scoreT.text = string.Format("{0}", score);
             StartCoroutine("SurvivalScore");
         }
 
@@ -65,9 +67,6 @@ public class GameManager : MonoBehaviour
             gamePlayTime = 0f;
             gameStart = true;
         }
-
-       
-
     }
 
     public void BadHit()
@@ -77,7 +76,7 @@ public class GameManager : MonoBehaviour
 
     public void NormalHit()
     {
-        score += 70;
+        score += 100;
     }
 
     public void PerfectHit()
@@ -100,8 +99,8 @@ public class GameManager : MonoBehaviour
         StopCoroutine("SurvivalScore");
         BestScoreManager.instance.Score(score);
     
-        int temp = score % 400;
-        LevelManager.instance.Exp(temp);
+        temp_exp = score / 100;
+        LevelManager.instance.Exp(temp_exp);
         TotalCoinManager.instance.Coin(ingameCoin);
         //Time.timeScale = 0f;
     }
@@ -109,12 +108,10 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SurvivalScore()
     {
-        score += 20;
         yield return new WaitForSeconds(0.25f);
         if(!endGame)
         {
             StartCoroutine("SurvivalScore");
-            
         }
           
     }

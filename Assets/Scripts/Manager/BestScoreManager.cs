@@ -10,9 +10,6 @@ public class BestScoreManager : MonoBehaviour
 {
     public static BestScoreManager instance;
 
-    [SerializeField]
-    private Text bestScoreT;
-
     public int bestScore;
     
     private IPAddress[] addr;
@@ -24,32 +21,40 @@ public class BestScoreManager : MonoBehaviour
         instance = this;
     }
 
-    private void FixedUpdate()
-    {
-        bestScoreT.text = string.Format("{0}", bestScore);
-    }
-
     public void Score(int score)
     {
-        if(bestScore < score)
-        {
-            bestScore = score;
-            bestScoreT.text = string.Format("{0}", bestScore);
-        }
-        
         MySqlConnection conn = new MySqlConnection("server=" + addr[1] + "; port=3306; Database=software; uid=root; pwd=123; CharSet=utf8;");
         try
         {
-            // 2. DB 열기
+            // DB 열기
             conn.Open();
             
-            // 3. Insert 쿼리 실행
-            string query = "UPDATE game SET High_Score = '" + bestScore + "' + where ID = '" + User.SetTest() + "';";
+            // select로 하이스코어 찾기
+            string query1 = "select High_Score from game where ID = '" + User.SetTest() + "';";
+            MySqlCommand cmd = new MySqlCommand(query1, conn);
+
+            // 4. 쿼리 결과 가져오기
+            MySqlDataReader Reader1 = cmd.ExecuteReader();
+            
+            if(Reader1.Read())
+            {
+                bestScore = int.Parse(Reader1.GetValue(0).ToString());
+                if (bestScore < score)
+                {
+                    bestScore = score;
+                }
+            }
+            
+            Reader1.Close();
+
+            // update 쿼리로 하이스코어 갱신
+            string query = "UPDATE game SET High_Score = '" + bestScore + "' where ID = '" + User.SetTest() + "';";
                 
-            MySqlCommand cmd = new MySqlCommand(query, conn);
+            cmd = new MySqlCommand(query, conn);
 
             MySqlDataReader Reader = cmd.ExecuteReader();
-
+            
+            Reader.Close();
         }
         catch (Exception ex)
         {
