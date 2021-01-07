@@ -12,3 +12,7 @@ RIF
 * Unity
 * C#
 * MySQL
+
+인게임 스크린샷
+-----------
+![img](./img/a1.png)
