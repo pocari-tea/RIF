@@ -21,7 +21,7 @@ RIF
 
 참조한 게임
 ------
-<img src="./img/cookie.png" width="600" height="400">
+<img src="./img/cookie.png" width="600" height="300">
 
 조작법
 -----------
